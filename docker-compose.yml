@@ -3,15 +3,21 @@ version: '3'
 services:
   db:
     image: postgres
+    environment:
+        POSTGRES_PASSWORD: password
+        POSTGRES_USER: username
+        POSTGRES_DB: dbname
     volumes:
       - db-data:/var/lib/postgresql/data
+    ports:
+        - "5432:5432"
   app:
     build: .
-    command: python ./manage.py runserver 0.0.0.0:80
+    command: bash -c "django-admin startproject django_app; django_app/manage.py"
     volumes:
       - .:/app
     ports:
-      - "8000:80"
+      - "8000:8000"
     depends_on:
       - db
 volumes:
